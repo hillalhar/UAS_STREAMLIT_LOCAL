@@ -3,9 +3,7 @@ import pandas as pd
 import joblib
 import os
 
-# 1. Load Model (Langsung dari folder artifacts)
-# Pastikan folder artifacts ada di direktori yang sama dengan app.py
-MODEL_PATH = "artifacts/credit_score_RandomForest.pkl"
+MODEL_PATH = "artifacts/credit_score_LogisticRegression.pkl"
 
 @st.cache_resource
 def load_model():
@@ -18,7 +16,6 @@ st.title("📊 Prediksi Credit Score")
 
 with st.form("prediction_form"):
     col1, col2 = st.columns(2)
-    # ... (input field tetap sama seperti kode Anda sebelumnya) ...
     with col1:
         age = st.number_input("Age", 18, 100, 25)
         annual_income = st.number_input("Annual Income", value=50000.0)
@@ -47,7 +44,6 @@ with st.form("prediction_form"):
     submit = st.form_submit_button("Prediksi")
 
 if submit:
-    # 2. Siapkan Dataframe untuk Prediksi
     input_data = pd.DataFrame([{
         "Age": age, "Annual_Income": annual_income, "Monthly_Inhand_Salary": salary,
         "Num_Bank_Accounts": num_bank_accounts, "Num_Credit_Card": num_credit_card,
@@ -61,7 +57,7 @@ if submit:
         "Outstanding_Debt": outstanding_debt, "Amount_invested_monthly": amount_invested
     }])
 
-    # 3. Prediksi Langsung
+    # predict menggunakan artifacts
     prediction = model.predict(input_data)
     target_map = {0: "Poor", 1: "Standard", 2: "Good"}
     result = target_map.get(int(prediction[0]), "Unknown")
